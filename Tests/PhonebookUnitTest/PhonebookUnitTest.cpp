@@ -21,5 +21,30 @@ namespace PhonebookUnitTest
 			Assert::IsTrue(entry.lastName.get() == ret.lastName.get());
 			Assert::IsTrue(entry.phoneNumber.get() == ret.phoneNumber.get());
 		}
+
+		TEST_METHOD(Insert_GetUnknownPhoneNumber_ReturnsNull)
+		{
+			PhonebookApp app;
+			Phonebook entry(L"Doe", L"John", L"1234567");
+			app.Insert(entry);
+			Phonebook ret = app.GetByPhoneNumber(L"007");
+
+			Assert::IsTrue(ret.firstName.get() == nullptr);
+			Assert::IsTrue(ret.lastName.get() == nullptr);
+			Assert::IsTrue(ret.phoneNumber.get() == nullptr);
+		}
+
+		TEST_METHOD(Insert_PreventDuplicates_PhoneNumber_IsKey)
+		{
+			PhonebookApp app;
+			Phonebook entry(L"Doe", L"John", L"1234567");
+			app.Insert(entry);
+			Phonebook entry1(L"Walker", L"Johhny", L"1234567");
+			app.Insert(entry1);
+			Phonebook ret = app.GetByPhoneNumber(L"1234567");
+
+			Assert::IsTrue(entry1.firstName.get() != ret.firstName.get());
+			Assert::IsTrue(entry1.lastName.get() != ret.lastName.get());
+		}
 	};
 }
