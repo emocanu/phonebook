@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="LessByPointer.h" />
+    <ClInclude Include="LessByPointerUmlauts.h" />
     <ClInclude Include="Phonebook.h" />
     <ClInclude Include="PhonebookApp.h" />
   </ItemGroup>

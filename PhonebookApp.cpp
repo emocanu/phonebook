@@ -17,6 +17,30 @@ void PhonebookApp::Insert(Phonebook entry)
     }
 }
 
+PhonebookList PhonebookApp::GetByFirstName(std::wstring firstName)
+{
+    PhonebookList list;
+    PointerToString firstNameKey = std::make_shared<std::wstring>(firstName);
+    auto range = m_firstNameMap.equal_range(firstNameKey);
+    for (auto it = range.first; it != range.second; ++it)
+    {
+        list.push_back(m_vectorEntries.at(it->second));
+    }
+    return list;
+}
+
+PhonebookList PhonebookApp::GetByLastName(std::wstring lastName)
+{
+    PhonebookList list;
+    PointerToString lastNameKey = std::make_shared<std::wstring>(lastName);
+    auto range = m_lastNameMap.equal_range(lastNameKey);
+    for (auto it = range.first; it != range.second; ++it)
+    {
+        list.push_back(m_vectorEntries.at(it->second));
+    }
+    return list;
+}
+
 Phonebook PhonebookApp::GetByPhoneNumber(std::wstring phoneNumber)
 {
     PointerToString phoneNumberKey = std::make_shared<std::wstring>(phoneNumber);

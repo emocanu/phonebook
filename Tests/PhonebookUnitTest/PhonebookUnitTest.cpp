@@ -46,5 +46,19 @@ namespace PhonebookUnitTest
 			Assert::IsTrue(entry1.firstName.get() != ret.firstName.get());
 			Assert::IsTrue(entry1.lastName.get() != ret.lastName.get());
 		}
+
+		TEST_METHOD(Insert_PermitDuplicates_FirstName_ReturnsCorrect)
+		{
+			PhonebookApp app;
+			app.Insert(Phonebook(L"Doe", L"Black", L"0234567"));
+			app.Insert(Phonebook(L"Doe", L"John", L"1234567"));
+			app.Insert(Phonebook(L"Walker", L"John", L"2234567"));
+			app.Insert(Phonebook(L"Doe", L"Johhny", L"3234567"));
+			
+			PhonebookList list = app.GetByFirstName(L"John");
+
+			Assert::IsTrue(list.size() == 2);
+		}
+
 	};
 }
