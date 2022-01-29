@@ -55,11 +55,26 @@ Phonebook PhonebookApp::GetByPhoneNumber(std::wstring phoneNumber)
 
 PhonebookList PhonebookApp::PhoneStartsWith(std::wstring prefix)
 {
+    if (prefix.empty())
+    {
+        return m_vectorEntries;
+    }
+
     PhonebookList list;
     PointerToString phoneNumber = std::make_shared<std::wstring>(prefix);
     auto first = m_phoneNumberMap.lower_bound(phoneNumber);
-    PointerToString phoneNumberGreater = std::make_shared<std::wstring>(GetGreaterThan(prefix));
-    auto onePastTheLast = m_phoneNumberMap.lower_bound(phoneNumberGreater);
+    PointerToStringMap::iterator onePastTheLast;
+    std::wstring next = GetGreaterThan(prefix);
+    if (prefix[0] == L'9'&& next[0] == L'1')
+    {
+        onePastTheLast = m_phoneNumberMap.end();
+    }
+    else
+    {
+        PointerToString phoneNumberGreater = std::make_shared<std::wstring>(next);
+        onePastTheLast = m_phoneNumberMap.lower_bound(phoneNumberGreater);
+    }
+
     for (auto it = first; it != onePastTheLast; ++it)
     {
         list.push_back(m_vectorEntries.at(it->second));
