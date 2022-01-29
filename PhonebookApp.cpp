@@ -7,10 +7,10 @@ void PhonebookApp::Insert(Phonebook entry)
     {
         PointerToString lastNameToInsert = entry.lastName;
         PointerToString firstNameToInsert = entry.firstName;
-        
+
         m_vectorEntries.push_back(entry);
         size_t inserted = m_vectorEntries.size() - 1;
-        
+
         m_phoneNumberMap.emplace(phoneNumberToInsert, inserted);
         m_lastNameMap.emplace(lastNameToInsert, inserted);
         m_firstNameMap.emplace(firstNameToInsert, inserted);
@@ -51,4 +51,29 @@ Phonebook PhonebookApp::GetByPhoneNumber(std::wstring phoneNumber)
     {
         return m_vectorEntries.at(it->second);
     }
+}
+
+PhonebookList PhonebookApp::PhoneStartsWith(std::wstring prefix)
+{
+    PhonebookList list;
+    PointerToString phoneNumber = std::make_shared<std::wstring>(prefix);
+    auto first = m_phoneNumberMap.lower_bound(phoneNumber);
+    PointerToString phoneNumberGreater = std::make_shared<std::wstring>(GetGreaterThan(prefix));
+    auto onePastTheLast = m_phoneNumberMap.lower_bound(phoneNumberGreater);
+    for (auto it = first; it != onePastTheLast; ++it)
+    {
+        list.push_back(m_vectorEntries.at(it->second));
+    }
+    return list;
+}
+
+std::wstring PhonebookApp::GetGreaterThan(std::wstring number)
+{
+    std::wstring next;
+    long long n = std::stoll(number);
+    if (n + 1 > 0)
+    {
+        next = std::to_wstring(n + 1);
+    }
+    return next;
 }

@@ -18,9 +18,11 @@ public:
     PhonebookList GetByLastName(std::wstring lastName);     // last name can be found multiple times
     PhonebookList GetByFirstName(std::wstring firstName);   // also the first name
     Phonebook GetByPhoneNumber(std::wstring phoneNumber);   // I relates uniqueness to the phone number
+    PhonebookList PhoneStartsWith(std::wstring prefix);
 
 private:
     PhonebookList GetByName(std::wstring name, PointerToStringMultiMap map);
+    std::wstring GetGreaterThan(std::wstring number);
 
     PhonebookList m_vectorEntries;
     PointerToStringMultiMap m_lastNameMap;

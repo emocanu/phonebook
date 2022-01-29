@@ -61,5 +61,21 @@ namespace PhonebookUnitTest
 			Assert::IsTrue(list.size() == 2);
 		}
 
+		TEST_METHOD(PhoneStartsWith_Returns_Correct)
+		{
+			PhonebookApp app;
+			app.Insert(Phonebook(L"Doe", L"Black", L"442255"));
+			app.Insert(Phonebook(L"Doe", L"Black", L"4429"));
+			app.Insert(Phonebook(L"Doe", L"Black", L"4420"));
+			app.Insert(Phonebook(L"Doe", L"John", L"442"));
+			app.Insert(Phonebook(L"Doe", L"Johhny", L"443"));
+			app.Insert(Phonebook(L"Walker", L"John", L"441255"));
+			app.Insert(Phonebook(L"Walker", L"John", L"441"));
+			app.Insert(Phonebook(L"Doe", L"Johhny", L"443255"));
+
+			PhonebookList list = app.PhoneStartsWith(L"442");
+
+			Assert::IsTrue(list.size() == 4);
+		}
 	};
 }
