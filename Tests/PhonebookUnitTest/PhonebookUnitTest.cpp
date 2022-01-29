@@ -27,6 +27,7 @@ namespace PhonebookUnitTest
 			PhonebookApp app;
 			Phonebook entry(L"Doe", L"John", L"1234567");
 			app.Insert(entry);
+			
 			Phonebook ret = app.GetByPhoneNumber(L"007");
 
 			Assert::IsTrue(ret.firstName.get() == nullptr);

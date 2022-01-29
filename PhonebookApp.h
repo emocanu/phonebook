@@ -20,6 +20,8 @@ public:
     Phonebook GetByPhoneNumber(std::wstring phoneNumber);   // I relates uniqueness to the phone number
 
 private:
+    PhonebookList GetByName(std::wstring name, PointerToStringMultiMap map);
+
     PhonebookList m_vectorEntries;
     PointerToStringMultiMap m_lastNameMap;
     PointerToStringMultiMap m_firstNameMap;

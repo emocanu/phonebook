@@ -17,11 +17,11 @@ void PhonebookApp::Insert(Phonebook entry)
     }
 }
 
-PhonebookList PhonebookApp::GetByFirstName(std::wstring firstName)
+PhonebookList PhonebookApp::GetByName(std::wstring name, PointerToStringMultiMap map)
 {
     PhonebookList list;
-    PointerToString firstNameKey = std::make_shared<std::wstring>(firstName);
-    auto range = m_firstNameMap.equal_range(firstNameKey);
+    PointerToString nameKey = std::make_shared<std::wstring>(name);
+    auto range = map.equal_range(nameKey);
     for (auto it = range.first; it != range.second; ++it)
     {
         list.push_back(m_vectorEntries.at(it->second));
@@ -29,16 +29,14 @@ PhonebookList PhonebookApp::GetByFirstName(std::wstring firstName)
     return list;
 }
 
+PhonebookList PhonebookApp::GetByFirstName(std::wstring firstName)
+{
+    return GetByName(firstName, m_firstNameMap);
+}
+
 PhonebookList PhonebookApp::GetByLastName(std::wstring lastName)
 {
-    PhonebookList list;
-    PointerToString lastNameKey = std::make_shared<std::wstring>(lastName);
-    auto range = m_lastNameMap.equal_range(lastNameKey);
-    for (auto it = range.first; it != range.second; ++it)
-    {
-        list.push_back(m_vectorEntries.at(it->second));
-    }
-    return list;
+    return GetByName(lastName, m_lastNameMap);
 }
 
 Phonebook PhonebookApp::GetByPhoneNumber(std::wstring phoneNumber)
