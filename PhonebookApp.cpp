@@ -53,6 +53,22 @@ Phonebook PhonebookApp::GetByPhoneNumber(std::wstring phoneNumber)
     }
 }
 
+void PhonebookApp::RemoveByPhoneNumber(std::wstring phoneNumber)
+{
+    PointerToString phoneNumberKey = std::make_shared<std::wstring>(phoneNumber);
+    auto it = m_phoneNumberMap.find(phoneNumberKey);
+    if (it != m_phoneNumberMap.end())
+    {
+        size_t index = it->second;
+        RemoveReferenceTo(m_firstNameMap, m_vectorEntries.at(index).firstName, it->second);
+        RemoveReferenceTo(m_lastNameMap, m_vectorEntries.at(index).lastName, it->second);
+        m_phoneNumberMap.erase(phoneNumberKey);
+        m_vectorEntries[index].firstName.reset();
+        m_vectorEntries[index].lastName.reset();
+        m_vectorEntries[index].phoneNumber.reset();
+    }
+}
+
 PhonebookList PhonebookApp::PhoneStartsWith(std::wstring prefix)
 {
     if (prefix.empty())
@@ -91,4 +107,17 @@ std::wstring PhonebookApp::GetGreaterThan(std::wstring number)
         next = std::to_wstring(n + 1);
     }
     return next;
+}
+
+void PhonebookApp::RemoveReferenceTo(PointerToStringMultiMap& map, PointerToString nameKey, size_t indexInVector)
+{
+    auto range = map.equal_range(nameKey);
+    for (auto it = range.first; it != range.second; ++it)
+    {
+        if (it->second == indexInVector)
+        {
+            map.erase(it);
+            break;
+        }
+    }
 }

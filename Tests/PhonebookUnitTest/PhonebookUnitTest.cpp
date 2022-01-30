@@ -162,5 +162,24 @@ namespace PhonebookUnitTest
 
 			Assert::IsTrue(list.size() == 0);
 		}
+
+		TEST_METHOD(RemoveByPhoneNumber_AllStructuresUpdated_Correct)
+		{
+			PhonebookApp app;
+			app.Insert(Phonebook(L"Doe", L"Black", L"942255"));
+			app.Insert(Phonebook(L"Doe", L"Black", L"10"));
+			app.Insert(Phonebook(L"Doe", L"Black", L"4420"));
+			app.Insert(Phonebook(L"Doe", L"John", L"1442"));
+			app.Insert(Phonebook(L"Doe", L"Johhny", L"9"));
+			app.Insert(Phonebook(L"Walker", L"John", L"441255"));
+			app.Insert(Phonebook(L"Walker", L"John", L"9999"));
+			app.Insert(Phonebook(L"Doe", L"Johhny", L"100"));
+
+			app.RemoveByPhoneNumber(L"4420"); // all indexes in the vector past the one deleted are changed, the vector re-arranged itself, references in the maps are invalid, so don't delete but make it null
+
+			Assert::IsTrue(app.GetByPhoneNumber(L"4420").phoneNumber == nullptr);
+			Assert::IsTrue(app.GetByLastName(L"Doe").size() == 5);
+			Assert::IsTrue(app.GetByFirstName(L"Black").size() == 2);
+		}
 	};
 }
