@@ -1,9 +1,6 @@
 ﻿#pragma once
 #include <memory>
 #include <string>
-#include <cwctype>
-#include <algorithm>
-#include <iterator>
 #include <unordered_map>
 
 struct LessByPointerUmlauts
@@ -11,19 +8,26 @@ struct LessByPointerUmlauts
     bool operator()(std::shared_ptr<std::wstring> lhs, std::shared_ptr<std::wstring> rhs) const
     {
         std::wstring ulhs, urhs;
-        auto lambdaToUmlauts = [this](wchar_t c) -> std::wstring
+        transform(*lhs.get(), ulhs);
+        transform(*rhs.get(), urhs);
+        return ulhs < urhs;
+    }
+
+    void transform(const std::wstring& in, std::wstring& out) const
+    {
+        out.empty();
+        for (wchar_t c : in)
         {
             auto it = this->eq.find(c);
             if (it != eq.end())
             {
-                return it->second;
+                out.append(it->second);
             }
-            return std::wstring(1, c); 
-        };
-        
-        std::transform(lhs.get()->begin(), lhs.get()->end(), std::back_inserter(ulhs), lambdaToUmlauts);
-        std::transform(rhs.get()->begin(), rhs.get()->end(), std::back_inserter(urhs), lambdaToUmlauts);
-        return ulhs < urhs;
+            else
+            {
+                out.push_back(c);
+            }
+        }
     }
 
     std::unordered_map<wchar_t, std::wstring> eq = { {L'ä', L"ae"}, {L'ü', L"ue"}, {L'ö', L"oe"}};
