@@ -61,6 +61,20 @@ namespace PhonebookUnitTest
 			Assert::IsTrue(list.size() == 2);
 		}
 
+		TEST_METHOD(Insert_PermitDuplicates_FirstNameCaseInsensitive_ReturnsCorrect)
+		{
+			PhonebookApp app;
+			app.Insert(Phonebook(L"Doe", L"Black", L"0234567"));
+			app.Insert(Phonebook(L"Doe", L"John", L"1234567"));
+			app.Insert(Phonebook(L"Walker", L"John", L"2234567"));
+			app.Insert(Phonebook(L"Winston", L"john", L"2234569"));
+			app.Insert(Phonebook(L"Doe", L"Johhny", L"3234567"));
+
+			PhonebookList list = app.GetByFirstName(L"John");
+
+			Assert::IsTrue(list.size() == 3);
+		}
+
 		TEST_METHOD(PhoneStartsWith_Returns_Correct)
 		{
 			PhonebookApp app;

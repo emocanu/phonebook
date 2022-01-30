@@ -17,7 +17,7 @@ void PhonebookApp::Insert(Phonebook entry)
     }
 }
 
-PhonebookList PhonebookApp::GetByName(std::wstring name, PointerToStringMultiMap map)
+PhonebookList PhonebookApp::GetByName(std::wstring name, PointerToStringCaseInsensitiveMultiMap map)
 {
     PhonebookList list;
     PointerToString nameKey = std::make_shared<std::wstring>(name);
@@ -109,7 +109,7 @@ std::wstring PhonebookApp::GetGreaterThan(std::wstring number)
     return next;
 }
 
-void PhonebookApp::RemoveReferenceTo(PointerToStringMultiMap& map, PointerToString nameKey, size_t indexInVector)
+void PhonebookApp::RemoveReferenceTo(PointerToStringCaseInsensitiveMultiMap& map, PointerToString nameKey, size_t indexInVector)
 {
     auto range = map.equal_range(nameKey);
     for (auto it = range.first; it != range.second; ++it)
