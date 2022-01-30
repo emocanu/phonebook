@@ -1,14 +1,14 @@
 #pragma once
 #include "Phonebook.h"
 #include "LessByPointer.h"
-#include "LessByPointerCaseInsensitive.h"
+#include "LessByPointerUmlauts.h"
 #include <vector>
 #include <map>
 
 using PhonebookList = std::vector<Phonebook>;
 using PointerToString = std::shared_ptr<std::wstring>;
 using PointerToStringMap = std::map<PointerToString, size_t, LessByPointer<std::wstring>>;
-using PointerToStringCaseInsensitiveMultiMap = std::multimap<PointerToString, size_t, LessByPointerCaseInsensitive>;
+using PointerToStringUmlautsMultiMap = std::multimap<PointerToString, size_t, LessByPointerUmlauts>;
 
 class PhonebookApp
 {
@@ -21,12 +21,12 @@ public:
     PhonebookList PhoneStartsWith(std::wstring prefix);
 
 private:
-    PhonebookList GetByName(std::wstring name, PointerToStringCaseInsensitiveMultiMap map);
+    PhonebookList GetByName(std::wstring name, PointerToStringUmlautsMultiMap map);
     std::wstring GetGreaterThan(std::wstring number);
-    void RemoveReferenceTo(PointerToStringCaseInsensitiveMultiMap& map, PointerToString name, size_t indexInVector);
+    void RemoveReferenceTo(PointerToStringUmlautsMultiMap& map, PointerToString name, size_t indexInVector);
 
     PhonebookList m_vectorEntries;
-    PointerToStringCaseInsensitiveMultiMap m_lastNameMap;
-    PointerToStringCaseInsensitiveMultiMap m_firstNameMap;
+    PointerToStringUmlautsMultiMap m_lastNameMap;
+    PointerToStringUmlautsMultiMap m_firstNameMap;
     PointerToStringMap m_phoneNumberMap;
 };

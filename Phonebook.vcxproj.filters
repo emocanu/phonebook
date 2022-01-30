@@ -24,7 +24,7 @@
     <ClInclude Include="LessByPointer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LessByPointerCaseInsensitive.h">
+    <ClInclude Include="LessByPointerUmlauts.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
