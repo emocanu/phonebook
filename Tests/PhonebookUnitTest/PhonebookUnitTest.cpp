@@ -181,5 +181,22 @@ namespace PhonebookUnitTest
 			Assert::IsTrue(app.GetByLastName(L"Doe").size() == 5);
 			Assert::IsTrue(app.GetByFirstName(L"Black").size() == 2);
 		}
+
+		TEST_METHOD(FirstNameStartsWith_Returns_Correct)
+		{
+			PhonebookApp app;
+			app.Insert(Phonebook(L"Doe", L"Mike", L"442255"));
+			app.Insert(Phonebook(L"Doe", L"Michael", L"4429"));
+			app.Insert(Phonebook(L"Doe", L"Mija", L"4420"));
+			app.Insert(Phonebook(L"Doe", L"Mi", L"442"));
+			app.Insert(Phonebook(L"Doe", L"Mhjolnir", L"443"));
+			app.Insert(Phonebook(L"Walker", L"Mk", L"441255"));
+			app.Insert(Phonebook(L"Walker", L"Meme", L"441"));
+			app.Insert(Phonebook(L"Doe", L"Johhny", L"443255"));
+
+			PhonebookList list = app.FirstNameStartsWith(L"Mi");
+
+			Assert::IsTrue(list.size() == 4);
+		}
 	};
 }

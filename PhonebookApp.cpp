@@ -109,6 +109,35 @@ std::wstring PhonebookApp::GetGreaterThan(std::wstring number)
     return next;
 }
 
+PhonebookList PhonebookApp::FirstNameStartsWith(std::wstring prefix)
+{
+    if (prefix.empty())
+    {
+        return m_vectorEntries;
+    }
+
+    PhonebookList list;
+    PointerToString firstName = std::make_shared<std::wstring>(prefix);
+    auto first = m_firstNameMap.lower_bound(firstName);
+    PointerToStringMap::iterator onePastTheLast;
+    std::wstring next = GetNextPrefix(prefix);
+    PointerToString firstNameGreater = std::make_shared<std::wstring>(next);
+    onePastTheLast = m_firstNameMap.lower_bound(firstNameGreater);
+
+    for (auto it = first; it != onePastTheLast; ++it)
+    {
+        list.push_back(m_vectorEntries.at(it->second));
+    }
+    return list;
+}
+
+std::wstring PhonebookApp::GetNextPrefix(std::wstring prefix)
+{
+    std::wstring next = prefix;
+    next[next.size() - 1] ++;
+    return next;
+}
+
 void PhonebookApp::RemoveReferenceTo(PointerToStringMultiMap& map, PointerToString nameKey, size_t indexInVector)
 {
     auto range = map.equal_range(nameKey);

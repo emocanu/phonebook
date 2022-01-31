@@ -20,10 +20,12 @@ public:
     Phonebook GetByPhoneNumber(std::wstring phoneNumber);   // I relates uniqueness to the phone number
     void RemoveByPhoneNumber(std::wstring phoneNumber);
     PhonebookList PhoneStartsWith(std::wstring prefix);
+    PhonebookList FirstNameStartsWith(std::wstring prefix);
 
 private:
     PhonebookList GetByName(std::wstring name, PointerToStringMultiMap map);
     std::wstring GetGreaterThan(std::wstring number);
+    std::wstring GetNextPrefix(std::wstring number);
     void RemoveReferenceTo(PointerToStringMultiMap& map, PointerToString name, size_t indexInVector);
 
     PhonebookList m_vectorEntries;
