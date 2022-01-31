@@ -21,12 +21,6 @@
     <ClInclude Include="PhonebookApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LessByPointer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LessByPointerUmlauts.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PhonebookApp.cpp">

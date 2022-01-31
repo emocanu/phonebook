@@ -1,23 +1,18 @@
 #pragma once
 #include <string>
-#include <memory>
-
-using PointerToString = std::shared_ptr<std::wstring>;
 
 struct Phonebook
 {
-    PointerToString lastName;
-    PointerToString firstName;
-    PointerToString phoneNumber;
+    std::wstring lastName;
+    std::wstring firstName;
+    std::wstring phoneNumber;
 
     Phonebook()
-        : lastName(nullptr), firstName(nullptr), phoneNumber(nullptr)
+        : lastName(L""), firstName(L""), phoneNumber(L"")
     {}
 
     Phonebook(std::wstring last_name, std::wstring first_name, std::wstring phone_number)
+        : lastName(last_name), firstName(first_name), phoneNumber(phone_number)
     {
-        lastName = std::make_shared<std::wstring>(last_name);
-        firstName = std::make_shared<std::wstring>(first_name);
-        phoneNumber = std::make_shared<std::wstring>(phone_number);
     }
 };

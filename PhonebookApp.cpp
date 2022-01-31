@@ -2,122 +2,79 @@
 
 void PhonebookApp::Insert(Phonebook entry)
 {
-    PointerToString phoneNumberToInsert = entry.phoneNumber;
-    if (m_phoneNumberMap.find(phoneNumberToInsert) == m_phoneNumberMap.end())
+    auto itFirstName = m_firstNameMap.find(entry.firstName);
+    auto itLastName = m_lastNameMap.find(entry.lastName);
+    auto itPhoneNo = m_phoneNumberMap.find(entry.phoneNumber);
+    if(itFirstName == m_firstNameMap.end()
+        && itLastName == m_lastNameMap.end()
+        && itPhoneNo == m_phoneNumberMap.end())
     {
-        PointerToString lastNameToInsert = entry.lastName;
-        PointerToString firstNameToInsert = entry.firstName;
-
         m_vectorEntries.push_back(entry);
         size_t inserted = m_vectorEntries.size() - 1;
 
-        m_phoneNumberMap.emplace(phoneNumberToInsert, inserted);
-        m_lastNameMap.emplace(lastNameToInsert, inserted);
-        m_firstNameMap.emplace(firstNameToInsert, inserted);
+        m_phoneNumberMap.emplace(entry.phoneNumber, inserted);
+        m_lastNameMap.emplace(entry.lastName, inserted);
+        m_firstNameMap.emplace(entry.firstName, inserted);
     }
 }
 
-PhonebookList PhonebookApp::GetByName(std::wstring name, PointerToStringMultiMap map)
+Phonebook PhonebookApp::GetByString(std::wstring name, StringMap map)
 {
-    PhonebookList list;
-    PointerToString nameKey = std::make_shared<std::wstring>(name);
-    auto range = map.equal_range(nameKey);
-    for (auto it = range.first; it != range.second; ++it)
+    auto it = map.find(name);
+    if(it != map.end())
     {
-        list.push_back(m_vectorEntries.at(it->second));
+       return m_vectorEntries.at(it->second);
     }
-    return list;
+    return Phonebook();
 }
 
-PhonebookList PhonebookApp::GetByFirstName(std::wstring firstName)
+Phonebook PhonebookApp::GetByFirstName(std::wstring firstName)
 {
-    return GetByName(firstName, m_firstNameMap);
+    return GetByString(firstName, m_firstNameMap);
 }
 
-PhonebookList PhonebookApp::GetByLastName(std::wstring lastName)
+Phonebook PhonebookApp::GetByLastName(std::wstring lastName)
 {
-    return GetByName(lastName, m_lastNameMap);
+    return GetByString(lastName, m_lastNameMap);
 }
 
 Phonebook PhonebookApp::GetByPhoneNumber(std::wstring phoneNumber)
 {
-    PointerToString phoneNumberKey = std::make_shared<std::wstring>(phoneNumber);
-    auto it = m_phoneNumberMap.find(phoneNumberKey);
-    if (it == m_phoneNumberMap.end())
+    return GetByString(phoneNumber, m_phoneNumberMap);
+}
+
+void PhonebookApp::RemoveByLastName(std::wstring lastName)
+{
+    auto it = m_lastNameMap.find(lastName);
+    if (it != m_lastNameMap.end())
     {
-        return Phonebook();
+        RemoveEntry(it->second);
     }
-    else
+}
+
+void PhonebookApp::RemoveByFirstName(std::wstring firstName)
+{
+    auto it = m_firstNameMap.find(firstName);
+    if (it != m_firstNameMap.end())
     {
-        return m_vectorEntries.at(it->second);
+        RemoveEntry(it->second);
     }
 }
 
 void PhonebookApp::RemoveByPhoneNumber(std::wstring phoneNumber)
 {
-    PointerToString phoneNumberKey = std::make_shared<std::wstring>(phoneNumber);
-    auto it = m_phoneNumberMap.find(phoneNumberKey);
+    auto it = m_phoneNumberMap.find(phoneNumber);
     if (it != m_phoneNumberMap.end())
     {
-        size_t index = it->second;
-        RemoveReferenceTo(m_firstNameMap, m_vectorEntries.at(index).firstName, it->second);
-        RemoveReferenceTo(m_lastNameMap, m_vectorEntries.at(index).lastName, it->second);
-        m_phoneNumberMap.erase(phoneNumberKey);
-        m_vectorEntries[index].firstName.reset();
-        m_vectorEntries[index].lastName.reset();
-        m_vectorEntries[index].phoneNumber.reset();
+        RemoveEntry(it->second);
     }
 }
 
-PhonebookList PhonebookApp::PhoneStartsWith(std::wstring prefix)
+void PhonebookApp::RemoveEntry(size_t index)
 {
-    if (prefix.empty())
-    {
-        return m_vectorEntries;
-    }
-
-    PhonebookList list;
-    PointerToString phoneNumber = std::make_shared<std::wstring>(prefix);
-    auto first = m_phoneNumberMap.lower_bound(phoneNumber);
-    PointerToStringMap::iterator onePastTheLast;
-    std::wstring next = GetGreaterThan(prefix);
-    if (prefix[0] == L'9'&& next[0] == L'1')
-    {
-        onePastTheLast = m_phoneNumberMap.end();
-    }
-    else
-    {
-        PointerToString phoneNumberGreater = std::make_shared<std::wstring>(next);
-        onePastTheLast = m_phoneNumberMap.lower_bound(phoneNumberGreater);
-    }
-
-    for (auto it = first; it != onePastTheLast; ++it)
-    {
-        list.push_back(m_vectorEntries.at(it->second));
-    }
-    return list;
-}
-
-std::wstring PhonebookApp::GetGreaterThan(std::wstring number)
-{
-    std::wstring next;
-    long long n = std::stoll(number);
-    if (n + 1 > 0)
-    {
-        next = std::to_wstring(n + 1);
-    }
-    return next;
-}
-
-void PhonebookApp::RemoveReferenceTo(PointerToStringMultiMap& map, PointerToString nameKey, size_t indexInVector)
-{
-    auto range = map.equal_range(nameKey);
-    for (auto it = range.first; it != range.second; ++it)
-    {
-        if (it->second == indexInVector)
-        {
-            map.erase(it);
-            break;
-        }
-    }
+    Phonebook entry = m_vectorEntries.at(index);
+    m_lastNameMap.erase(entry.lastName);
+    m_firstNameMap.erase(entry.firstName);
+    m_phoneNumberMap.erase(entry.phoneNumber);
+    m_vectorEntries[index] = Phonebook();
 }
